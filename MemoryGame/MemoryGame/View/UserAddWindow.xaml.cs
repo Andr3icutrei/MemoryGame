@@ -23,5 +23,6 @@ namespace MemoryGame.View
         {
             InitializeComponent();
         }
+
     }
 }
