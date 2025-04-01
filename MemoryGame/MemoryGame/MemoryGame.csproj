@@ -8,4 +8,26 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="LoginImages\dog.jpg" />
+    <None Remove="LoginImages\giraffe.jpg" />
+    <None Remove="LoginImages\kangaroo.jpg" />
+    <None Remove="LoginImages\lion.jpg" />
+    <None Remove="LoginImages\sloth.jpg" />
+    <None Remove="LoginImages\turtle.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="LoginImages\dog.jpg" />
+    <Resource Include="LoginImages\giraffe.jpg" />
+    <Resource Include="LoginImages\kangaroo.jpg" />
+    <Resource Include="LoginImages\lion.jpg" />
+    <Resource Include="LoginImages\sloth.jpg" />
+    <Resource Include="LoginImages\turtle.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
