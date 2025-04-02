@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using MemoryGame.ViewModel.Login;
+using MemoryGame.ViewModel.Shared;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +21,9 @@ namespace MemoryGame.View
         public LoginWindow()
         {
             InitializeComponent();
+            var sharedViewModel = new SharedViewModel();
+
+            DataContext = new LoginViewModel(sharedViewModel);
         }
     }
 }

@@ -21,15 +21,15 @@ namespace MemoryGame.View
     /// </summary>
     public partial class UserAddWindow : Window
     {
-        public UserAddWindow(SharedViewModel vm) : this()
-        {
-            if(DataContext == null) 
-                DataContext = new UserAddViewModel(vm);
-        }
-
-        public UserAddWindow() 
+        public UserAddWindow(SharedViewModel vm) 
         {
             InitializeComponent();
+            DataContext = new UserAddViewModel(vm); 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

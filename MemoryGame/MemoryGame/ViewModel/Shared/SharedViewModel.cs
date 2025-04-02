@@ -32,5 +32,10 @@ namespace MemoryGame.ViewModel.Shared
         {
             BoundUser = u;
         }
+
+        public SharedViewModel()
+        {
+            BoundUser = new User();
+        }
     }
 }

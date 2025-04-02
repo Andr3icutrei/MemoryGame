@@ -9,18 +9,18 @@ namespace MemoryGame.Model
     public class User
     {
         public string Username { get; set; }
-        public string ImageName { get;set ; }
+        public UInt16 ImageIndex { get;set ; }
 
-        public User(string username,string imageName)
+        public User(string username)
         {
             Username = username;
-            ImageName = imageName;
+            ImageIndex = 0;
         }
 
         public User()
         {
             Username = string.Empty;
-            ImageName = string.Empty;
+            ImageIndex = 0;
         }
     }
 }

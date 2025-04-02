@@ -17,18 +17,14 @@ namespace MemoryGame.ViewModel.UserAdd
 {
     public class UserAddViewModel : INotifyPropertyChanged
     {
-        private SharedViewModel sharedVM;
-        public SharedViewModel SharedVM => sharedVM;
+        public SharedViewModel SharedVM { get; set; }
 
-        public ICommand ButtonAddUserClick { get; }
-        public ICommand ButtonReturnToLoginClick { get; }
         public ICommand ButtonLeftArrowClick { get; }
         public ICommand ButtonRightArrowClick { get; }
 
-        private UInt16 imageIndex;
-
         private static readonly string LoginImagesPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "LoginImages");
         private ImageSource currentImage;
+        public ObservableCollection<ImageSource> Images { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -50,21 +46,22 @@ namespace MemoryGame.ViewModel.UserAdd
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<ImageSource> Images { get; set; }
-
         private void InitializeImages()
         {
-            imageIndex = 0;
+            SharedVM.BoundUser.ImageIndex = 0;
             Images = new ObservableCollection<ImageSource>();
             LoadImages(LoginImagesPath);
             CurrentImage = Images[0];
         }
         public UserAddViewModel()
         {
-            ButtonAddUserClick = new RelayCommand(Execute_ButtonAddUserClick);
-            ButtonReturnToLoginClick = new RelayCommand(Execute_ButtonReturnToLoginClick);
             ButtonLeftArrowClick = new RelayCommand(Execute_ButtonLeftArrowClick);
             ButtonRightArrowClick = new RelayCommand(Execute_ButtonRightArrowClick);
+        }
+
+        public UserAddViewModel(SharedViewModel vm) : this()
+        {
+            SharedVM = vm;
 
             InitializeImages();
         }
@@ -91,36 +88,21 @@ namespace MemoryGame.ViewModel.UserAdd
             Debug.Print(Images[0].ToString());
         }
 
-        public UserAddViewModel(SharedViewModel vm) : this()
-        {
-            sharedVM = vm;
-        }
-
-        private void Execute_ButtonAddUserClick()
-        {
-
-        }
-
-        private void Execute_ButtonReturnToLoginClick()
-        {
-
-        }
-
         private void Execute_ButtonLeftArrowClick()
         {
-            if (imageIndex > 0)
+            if (SharedVM.BoundUser.ImageIndex > 0)
             {
-                imageIndex--;
-                CurrentImage = Images[imageIndex % Images.Count];
+                SharedVM.BoundUser.ImageIndex--;
+                CurrentImage = Images[SharedVM.BoundUser.ImageIndex % Images.Count];
             }
         }
 
         private void Execute_ButtonRightArrowClick()
         {
-            if (imageIndex < Images.Count)
+            if (SharedVM.BoundUser.ImageIndex < Images.Count)
             {
-                imageIndex++;
-                CurrentImage = Images[imageIndex % Images.Count];
+                SharedVM.BoundUser.ImageIndex++;
+                CurrentImage = Images[SharedVM.BoundUser.ImageIndex % Images.Count];
             }
         }
     }

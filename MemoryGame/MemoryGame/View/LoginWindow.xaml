@@ -7,10 +7,7 @@
         xmlns:vm="clr-namespace:MemoryGame.ViewModel.Login"
         mc:Ignorable="d"
         Title="Login" Height="450" Width="700">
-    <Window.DataContext>
-        <vm:LoginViewModel/>
-    </Window.DataContext>
-    
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

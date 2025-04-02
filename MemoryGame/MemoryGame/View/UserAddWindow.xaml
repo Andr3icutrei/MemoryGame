@@ -32,8 +32,8 @@
         <Grid Grid.Column="0"  Background="#FF9933">
             <Label Content="Type your username:" HorizontalAlignment="Left" Margin="17,18,0,0" VerticalAlignment="Top" Width="148" Foreground="White"/>
             <TextBox HorizontalAlignment="Left" Margin="21,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="136" Text="{Binding SharedVM.BoundUser.Username,UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Content="Add User" Command="{Binding ButtonAddUserClick}" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top" Width="59" Style="{StaticResource ButtonStyleTurqoise}"/>
-            <Button Content="Return to Login" Command="{Binding ButtonReturnToLoginClick}" HorizontalAlignment="Left" Margin="83,174,0,0" VerticalAlignment="Top" Width="107" Height="24" Style="{StaticResource ButtonStyleTurqoise}"/>
+            <Button Content="Add User" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top" Width="59" Style="{StaticResource ButtonStyleTurqoise}" Click="Button_Click"/>
+            <Button Content="Return to Login" HorizontalAlignment="Left" Margin="83,174,0,0" VerticalAlignment="Top" Width="107" Height="24" Style="{StaticResource ButtonStyleTurqoise}" Click="Button_Click"/>
         </Grid>
 
         <Grid Grid.Column="1" Background="Turquoise">
