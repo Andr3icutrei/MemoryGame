@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MemoryGame.Model;
 using System.ComponentModel;
+using MemoryGame.View;
+using MemoryGame.ViewModel.Shared;
 
 namespace MemoryGame.ViewModel.Login
 {
     public class LoginViewModel 
     {
+        private SharedViewModel sharedVM;
+        public SharedViewModel SharedVM => sharedVM;
         public ICommand ButtonLeftArrowClick { get; }
         public ICommand ButtonRightArrowClick { get; }
         public ICommand ButtonNewUserClick { get; }
@@ -48,7 +52,8 @@ namespace MemoryGame.ViewModel.Login
 
         private void Execute_NewUserClick()
         {
-
+            UserAddWindow w = new UserAddWindow(sharedVM);
+            w.Show();
         }
 
         private void Execute_DeleteUserClick()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MemoryGame.ViewModel.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MemoryGame.ViewModel.UserAdd;
 
 namespace MemoryGame.View
 {
@@ -19,10 +21,15 @@ namespace MemoryGame.View
     /// </summary>
     public partial class UserAddWindow : Window
     {
-        public UserAddWindow()
+        public UserAddWindow(SharedViewModel vm) : this()
+        {
+            if(DataContext == null) 
+                DataContext = new UserAddViewModel(vm);
+        }
+
+        public UserAddWindow() 
         {
             InitializeComponent();
         }
-
     }
 }

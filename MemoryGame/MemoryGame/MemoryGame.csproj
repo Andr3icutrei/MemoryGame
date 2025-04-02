@@ -26,8 +26,4 @@
     <Resource Include="LoginImages\turtle.jpg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
