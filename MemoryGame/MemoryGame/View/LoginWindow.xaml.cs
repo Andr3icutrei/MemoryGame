@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MemoryGame.Services;
 
 namespace MemoryGame.View
 {
@@ -24,6 +25,20 @@ namespace MemoryGame.View
             var sharedViewModel = new SharedViewModel();
 
             DataContext = new LoginViewModel(sharedViewModel);
+            this.Closing += ((System.Windows.Application.Current as App)).LoginWindow_Closing;
+        }
+        public void LoginWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Window activeWindow = sender as Window;
+            if (activeWindow != null)
+            {
+                JsonSerializerService.SaveUsers(this);
+            }
+        }
+
+        public void Window_Hide(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Hide();    
         }
     }
 }

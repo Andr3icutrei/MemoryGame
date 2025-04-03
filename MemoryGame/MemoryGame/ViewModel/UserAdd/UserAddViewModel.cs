@@ -1,4 +1,5 @@
 ﻿using MemoryGame.Model;
+using MemoryGame.Services;
 using MemoryGame.ViewModel.Shared;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,10 @@ namespace MemoryGame.ViewModel.UserAdd
     public class UserAddViewModel : INotifyPropertyChanged
     {
         public SharedViewModel SharedVM { get; set; }
-
         public ICommand ButtonLeftArrowClick { get; }
         public ICommand ButtonRightArrowClick { get; }
 
-        private static readonly string LoginImagesPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "LoginImages");
         private ImageSource currentImage;
-        public ObservableCollection<ImageSource> Images { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -47,11 +45,9 @@ namespace MemoryGame.ViewModel.UserAdd
         }
 
         private void InitializeImages()
-        {
+        {      
             SharedVM.BoundUser.ImageIndex = 0;
-            Images = new ObservableCollection<ImageSource>();
-            LoadImages(LoginImagesPath);
-            CurrentImage = Images[0];
+            CurrentImage = LoginImagesLoadService.Images[0];
         }
         public UserAddViewModel()
         {
@@ -62,30 +58,7 @@ namespace MemoryGame.ViewModel.UserAdd
         public UserAddViewModel(SharedViewModel vm) : this()
         {
             SharedVM = vm;
-
             InitializeImages();
-        }
-
-        private void LoadImages(string path)
-        {
-            if (Directory.Exists(path))
-            {
-                string[] files = Directory.GetFiles(path, "*.jpg");
-                foreach (string file in files)
-                {
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.CacheOption = BitmapCacheOption.OnLoad;
-                    image.UriSource = new Uri("pack://application:,,,/LoginImages/" + Path.GetFileName(file), UriKind.Absolute);
-                    image.EndInit();
-                    Images.Add(image);
-                }
-            }
-            else
-            {
-                Debug.Print("Images not loaded");
-            }
-            Debug.Print(Images[0].ToString());
         }
 
         private void Execute_ButtonLeftArrowClick()
@@ -93,16 +66,16 @@ namespace MemoryGame.ViewModel.UserAdd
             if (SharedVM.BoundUser.ImageIndex > 0)
             {
                 SharedVM.BoundUser.ImageIndex--;
-                CurrentImage = Images[SharedVM.BoundUser.ImageIndex % Images.Count];
+                CurrentImage = LoginImagesLoadService.Images[SharedVM.BoundUser.ImageIndex % LoginImagesLoadService.Images.Count];
             }
         }
 
         private void Execute_ButtonRightArrowClick()
         {
-            if (SharedVM.BoundUser.ImageIndex < Images.Count)
+            if (SharedVM.BoundUser.ImageIndex < LoginImagesLoadService.Images.Count-1)
             {
                 SharedVM.BoundUser.ImageIndex++;
-                CurrentImage = Images[SharedVM.BoundUser.ImageIndex % Images.Count];
+                CurrentImage = LoginImagesLoadService.Images[SharedVM.BoundUser.ImageIndex % LoginImagesLoadService.Images.Count];
             }
         }
     }

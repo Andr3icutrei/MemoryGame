@@ -1,0 +1,33 @@
+﻿<Window x:Class="MemoryGame.View.SelectBoardDimensionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MemoryGame.View"
+        mc:Ignorable="d"
+        Title="SelectBoardDimensionsWindow" Height="240" Width="150" Background="Purple">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/View/ButtonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <StackPanel Margin="10">
+        <TextBlock Text="NO rows and columns Rows and Columns&#x0A;Cannot be at the same time&#x0A; odd numbers" Foreground="White" Margin="2,2,2,2" Padding="5" Height="65"/>
+        <TextBlock Text="Rows:" Foreground="White"/>
+        <TextBox Text="{Binding Dimensions.Rows,UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Text="Columns:" Foreground="White"/>
+        <TextBox Text="{Binding Dimensions.Columns,UpdateSourceTrigger=PropertyChanged}"/>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="OK" Style="{StaticResource ButtonStyleOrange}" Height="22" Width="30"
+                    Command="{Binding ButtonOKCommand}"/>
+            <Button Content="Cancel" Margin="5,0,0,0" Style="{StaticResource ButtonStyleOrange}" Height="23"
+                    Command="{Binding ButtonCancelCommand}"/>
+        </StackPanel>
+
+    </StackPanel>
+</Window>

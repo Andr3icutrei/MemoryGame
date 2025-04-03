@@ -29,6 +29,18 @@ namespace MemoryGame.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var senderButton = sender as Button;
+            var dataContext = this.DataContext as UserAddViewModel;
+
+            if (senderButton != null && senderButton.Content == "Return to Login")
+            {
+                dataContext.SharedVM.BoundUser.IsAdded = false;
+            }
+            else
+            { 
+                dataContext.SharedVM.BoundUser.IsAdded = true; 
+            }
+
             this.Close();
         }
     }
