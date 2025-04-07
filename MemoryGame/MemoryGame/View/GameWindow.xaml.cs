@@ -12,15 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MemoryGame.ViewModel.GameWindow;
+using MemoryGame.Model;
 
 namespace MemoryGame.View
 {
     public partial class GameWindow : Window
     {
-        public GameWindow()
+        public GameWindow(User u)
         {
             InitializeComponent();
-            DataContext = new GameWindowViewModel();
+            DataContext = new GameWindowViewModel(u);
         }
     }
 }

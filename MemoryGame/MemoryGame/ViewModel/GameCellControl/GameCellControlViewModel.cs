@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using MemoryGame.View;
+using System.Text.Json.Serialization;
 
 namespace MemoryGame.ViewModel.GameCellControl
 {
@@ -16,6 +17,8 @@ namespace MemoryGame.ViewModel.GameCellControl
     {
         public GameCell Cell {  get; set; }
         private ImageSource frontCardImageSource;
+
+        [JsonIgnore]
         public ImageSource FrontCardImageSource
         {
             get => frontCardImageSource;

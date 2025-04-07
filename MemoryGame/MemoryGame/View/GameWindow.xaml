@@ -47,8 +47,8 @@
                             <MenuItem Header="Rock Albums" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenRockCommand}"/>
                             <MenuItem Header="Beer" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenBeerCommand}"/>
                         </MenuItem>
-                        <MenuItem Header="Open Game" Style="{StaticResource MenuItemStyleTurquoise}"/>
-                        <MenuItem Header="Save Game" Style="{StaticResource MenuItemStyleTurquoise}"/>
+                        <MenuItem Header="Open Game" Style="{StaticResource MenuItemStyleTurquoise}" Command="{Binding LoadGameCommand}"/>
+                        <MenuItem Header="Save Game" Style="{StaticResource MenuItemStyleTurquoise}" Command="{Binding SaveGameCommand}"/>
                         <MenuItem Header="Stats" Style="{StaticResource MenuItemStyleTurquoise}"/>
                         <MenuItem Header="Exit" Style="{StaticResource MenuItemStyleTurquoise}"/>
                     </MenuItem>

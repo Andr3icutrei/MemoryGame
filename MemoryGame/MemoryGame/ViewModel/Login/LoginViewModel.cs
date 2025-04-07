@@ -132,7 +132,7 @@ namespace MemoryGame.ViewModel.Login
 
         private void Execute_PlayClick()
         {
-            View.GameWindow gameWindow = new View.GameWindow();
+            View.GameWindow gameWindow = new View.GameWindow(SelectedUser);
             gameWindow.Show();
         }
 

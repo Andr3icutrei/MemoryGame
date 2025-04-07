@@ -38,6 +38,13 @@ namespace MemoryGame.Model
             IsAdded = true;
         }
 
+        public User(string username,bool isAdded,UInt16 imageIndex)
+        {
+            Username = username;
+            IsAdded = isAdded;
+            ImageIndex = imageIndex;
+        }
+
         public User(User boundUser)
         {
             Username = boundUser.Username;

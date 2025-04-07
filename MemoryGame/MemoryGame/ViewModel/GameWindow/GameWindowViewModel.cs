@@ -40,6 +40,8 @@ namespace MemoryGame.ViewModel.GameWindow
         public ICommand ChosenBeerCommand { get; }
         public ICommand FlipCommand { get; }
         public ICommand StandardGameCommand { get; }
+        public ICommand SaveGameCommand { get; }
+        public ICommand LoadGameCommand { get; }
         // game catergory
         private CategoryType chosenCategoryType;
         public CategoryType ChosenCategoryType
@@ -57,7 +59,6 @@ namespace MemoryGame.ViewModel.GameWindow
         public BoardDimensions Dimensions { get; set; }
         // game logic
         private UInt16 cardMatches { get; set; }
-
         private GameCellControlViewModel firstSelectedCell { get; set; }
         private GameCellControlViewModel secondSelectedCell { get; set; }
         public ObservableCollection<ImageSource> ChosenImages { get; set; }
@@ -82,7 +83,7 @@ namespace MemoryGame.ViewModel.GameWindow
             }
         }
         private DispatcherTimer gameTimer;
-        private int gameSecondsPassed;
+
         private bool isCardClickBusy;
 
         private bool isChosenGameTimeReadOnly;
@@ -95,12 +96,14 @@ namespace MemoryGame.ViewModel.GameWindow
                 OnPropertyChanged(nameof(IsChosenGameTimeReadOnly));
             }
         }
+        // playing user
+        private User GameUser { get; set; }
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public GameWindowViewModel()
+        public GameWindowViewModel(User u)
         {
             ChosenGameTime = String.Empty;
             IsChosenGameTimeReadOnly = false;
@@ -110,8 +113,38 @@ namespace MemoryGame.ViewModel.GameWindow
             ChosenRockCommand = new RelayCommand(ButtonChosenRockCategory);
             ChosenBeerCommand = new RelayCommand(ButtonChosenBeerCategory);
             StandardGameCommand = new RelayCommand(StartStandardGame, CanExecute_NewGame);
+            SaveGameCommand = new RelayCommand(SaveCurrentGame, CanExecute_SaveCurrentGame);
+            LoadGameCommand = new RelayCommand(LoadCurrentGame, CanExecute_LoadCurrentGame);
+
+            GameUser = u;
 
             ChosenCategoryType = CategoryType.Invalid;
+        }
+
+        private void SaveCurrentGame()
+        {
+            UserGameSerializerService.SaveGame(GameUser,this);
+        }
+
+        private void LoadCurrentGame()
+        {
+            SavedGameDTO savedGameDTO = UserGameSerializerService.LoadGame(GameUser.Username);
+            GameUser = new User(savedGameDTO.Username,savedGameDTO.IsAdded,savedGameDTO.ImageIndex);
+            
+            ChosenCategoryType = savedGameDTO.ChosenCategoryType;
+            Dimensions = savedGameDTO.Dimensions;
+            GameBoardCells = savedGameDTO.GameBoardCells;
+            ChosenGameTime = savedGameDTO.ChosenGameTime;
+        }
+
+        private bool CanExecute_SaveCurrentGame()
+        {
+            return IsChosenGameTimeReadOnly;
+        }
+
+        private bool CanExecute_LoadCurrentGame()
+        {
+            return !CanExecute_SaveCurrentGame();
         }
 
         private void StartStandardGame()
