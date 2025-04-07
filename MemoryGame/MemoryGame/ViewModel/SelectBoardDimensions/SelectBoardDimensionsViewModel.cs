@@ -12,6 +12,7 @@ namespace MemoryGame.ViewModel.SelectBoardDimensions
 {
     public class SelectBoardDimensionsViewModel : INotifyPropertyChanged
     {
+        public Action RequestClose { get; set; }
         private BoardDimensions dimensions;
         public BoardDimensions Dimensions
         {
@@ -26,18 +27,7 @@ namespace MemoryGame.ViewModel.SelectBoardDimensions
         public ICommand ButtonOKCommand { get; }
         public ICommand ButtonCancelCommand { get; }
 
-        public Action CloseAction { get; set; }
-        private ICommand closeCommand;
-
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        public ICommand CloseCommand
-        {
-            get
-            {
-                return closeCommand ?? (closeCommand = new RelayCommand(ExecuteClose));
-            }
-        }
 
         private void OnPropertyChanged(string propertyName)
         {
@@ -56,25 +46,21 @@ namespace MemoryGame.ViewModel.SelectBoardDimensions
             int resultRows,resultColumns;
             return Dimensions.Rows!=String.Empty && Dimensions.Columns!=String.Empty &&
                 int.TryParse(Dimensions.Rows,out resultRows) && int.TryParse(Dimensions.Columns, out resultColumns) &&
-                (resultRows % 2 == 0 || resultColumns % 2 == 0);
+                (resultRows % 2 == 0 || resultColumns % 2 == 0) && 
+                resultRows>=2 && resultRows<=6 && 
+                resultColumns>=2 && resultColumns<=6;
         }
 
         private void Execute_ButtonOKClick()
         {
             Dimensions.AreValidDimensions = true;
-            ExecuteClose();
+            RequestClose?.Invoke();
         }
 
         private void Execute_ButtonCancel()
         {
             Dimensions.AreValidDimensions = false;
-            ExecuteClose();
-        }
-        private void ExecuteClose()
-        {
-            CloseAction?.Invoke();
-            Debug.Print(Dimensions.Rows);
-            Debug.Print(Dimensions.Columns);
+            RequestClose?.Invoke();
         }
 
     }

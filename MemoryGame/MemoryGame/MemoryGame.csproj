@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="GameImages\coveredCard\mario.jpg" />
     <None Remove="LoginImages\dog.jpg" />
     <None Remove="LoginImages\fratzica.jpg" />
     <None Remove="LoginImages\giraffe.jpg" />
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="GameImages\coveredCard\mario.jpg" />
     <Resource Include="LoginImages\dog.jpg" />
     <Resource Include="LoginImages\fratzica.jpg" />
     <Resource Include="LoginImages\giraffe.jpg" />

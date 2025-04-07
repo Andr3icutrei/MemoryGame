@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MemoryGame.View"
         mc:Ignorable="d"
-        Title="SelectBoardDimensionsWindow" Height="240" Width="150" Background="Purple">
+        Title="SelectBoardDimensionsWindow" Height="260" Width="200" Background="Purple"
+        WindowStartupLocation="CenterScreen">
 
 
     <Window.Resources>
@@ -28,6 +29,6 @@
             <Button Content="Cancel" Margin="5,0,0,0" Style="{StaticResource ButtonStyleOrange}" Height="23"
                     Command="{Binding ButtonCancelCommand}"/>
         </StackPanel>
-
+        <TextBlock FontSize="12"><Run Text="Note: rows and columns values"/><LineBreak /><Run Text="shall be between 2 and 6"/></TextBlock>
     </StackPanel>
 </Window>

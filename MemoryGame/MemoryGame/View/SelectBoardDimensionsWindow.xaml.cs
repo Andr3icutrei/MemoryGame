@@ -26,8 +26,6 @@ namespace MemoryGame.View
         {
             InitializeComponent();
             DataContext = new SelectBoardDimensionsViewModel(boardDimensions);
-            var viewModel = (SelectBoardDimensionsViewModel)DataContext;
-            viewModel.CloseAction = () => this.Close();
         }
     }
 }

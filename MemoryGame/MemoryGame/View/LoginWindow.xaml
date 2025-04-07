@@ -7,7 +7,8 @@
         xmlns:vm="clr-namespace:MemoryGame.ViewModel.Login" 
         mc:Ignorable="d"
         Title="Login" Height="450" Width="700"
-        Closing="LoginWindow_Closing">
+        Closing="LoginWindow_Closing"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -36,7 +37,7 @@
                 <ColumnDefinition Width="Auto" MinWidth="250" />
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Column="0" Margin="45,61,45,37" ItemsSource="{Binding ListboxItems}" 
+            <ListBox Grid.Column="0" Margin="45,61,45,37" ItemsSource="{Binding ListboxUserItems}" 
                      SelectedItem="{Binding SelectedUser}" SelectedIndex="{Binding SelectedUserIndex}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

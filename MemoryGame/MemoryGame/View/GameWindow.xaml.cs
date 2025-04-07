@@ -11,19 +11,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using MemoryGame.ViewModel.SelectOptions;
+using MemoryGame.ViewModel.GameWindow;
 
 namespace MemoryGame.View
 {
-    /// <summary>
-    /// Interaction logic for PlayWindow.xaml
-    /// </summary>
-    public partial class SelectOptionsWindow : Window
+    public partial class GameWindow : Window
     {
-        public SelectOptionsWindow()
+        public GameWindow()
         {
             InitializeComponent();
-            DataContext = new SelectOptionsViewModel();
+            DataContext = new GameWindowViewModel();
         }
     }
 }

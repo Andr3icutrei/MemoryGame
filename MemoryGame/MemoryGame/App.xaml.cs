@@ -27,10 +27,10 @@ namespace MemoryGame
                 {
                     foreach (var user in users)
                     {
-                        vm.ListboxItems.Add(user);
+                        vm.ListboxUserItems.Add(user);
                     }
-                    if(vm.ListboxItems.Count > 0)
-                        vm.UserImage = LoginImagesLoadService.Images[vm.ListboxItems[0].ImageIndex];
+                    if(vm.ListboxUserItems.Count > 0)
+                        vm.UserImage = LoginImagesLoadService.Images[vm.ListboxUserItems[0].ImageIndex];
                 }
                 w.Show();
             });

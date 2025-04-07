@@ -12,6 +12,7 @@ using MemoryGame.ViewModel.Shared;
 using System.Diagnostics;
 using System.Windows.Media;
 using MemoryGame.Services;
+using MemoryGame.ViewModel.GameWindow;
 
 namespace MemoryGame.ViewModel.Login
 {
@@ -46,14 +47,12 @@ namespace MemoryGame.ViewModel.Login
                 selectedUserIndex = value;
                 if (selectedUserIndex == -1)
                     selectedUserIndex = 0;
-                UserImage = LoginImagesLoadService.Images[ListboxItems[selectedUserIndex].ImageIndex];
+                UserImage = LoginImagesLoadService.Images[ListboxUserItems[selectedUserIndex].ImageIndex];
                 OnPropertyChanged(nameof(SelectedUserIndex));
             }
         }
 
-        public const string LoginImagesPath = "../../LoginImages/";
-
-        public ObservableCollection<User> ListboxItems { get; set; }
+        public ObservableCollection<User> ListboxUserItems { get; set; }
 
         private ImageSource userImage;
 
@@ -85,7 +84,7 @@ namespace MemoryGame.ViewModel.Login
             ButtonPlayClick = new RelayCommand(Execute_PlayClick,CanExecute_PlayClick);
             ButtonCancelClick = new RelayCommand(Execute_CancelClick);
 
-            ListboxItems = new ObservableCollection<User>();
+            ListboxUserItems = new ObservableCollection<User>();
         }
 
         private bool CanExecute_DeleteUserClick()
@@ -120,7 +119,7 @@ namespace MemoryGame.ViewModel.Login
             if (SharedVM.BoundUser.IsAdded)
             {
                 User newUser = new User(SharedVM.BoundUser);
-                ListboxItems.Add(newUser);
+                ListboxUserItems.Add(newUser);
                 UserImage = LoginImagesLoadService.Images[SharedVM.BoundUser.ImageIndex];
             }
         }
@@ -128,13 +127,13 @@ namespace MemoryGame.ViewModel.Login
         private void Execute_DeleteUserClick()
         {
             int index = SelectedUserIndex;
-            ListboxItems.RemoveAt(index);
+            ListboxUserItems.RemoveAt(index);
         }
 
         private void Execute_PlayClick()
         {
-            SelectOptionsWindow selectOptionsWindow = new SelectOptionsWindow();
-            selectOptionsWindow.Show();
+            View.GameWindow gameWindow = new View.GameWindow();
+            gameWindow.Show();
         }
 
         private void Execute_CancelClick()

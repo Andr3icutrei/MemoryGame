@@ -19,7 +19,7 @@ namespace MemoryGame.Services
         {
             if (window.DataContext is LoginViewModel loginViewModel)
             {
-                List<User> users = loginViewModel.ListboxItems.ToList();
+                List<User> users = loginViewModel.ListboxUserItems.ToList();
                 string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filepath, json);
             }

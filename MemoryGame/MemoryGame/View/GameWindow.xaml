@@ -1,13 +1,15 @@
-﻿<Window x:Class="MemoryGame.View.SelectOptionsWindow"
+﻿<Window x:Class="MemoryGame.View.GameWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MemoryGame.View"
-        xmlns:vm="clr-namespace:MemoryGame.ViewModel.SelectOptions"
+        xmlns:vm="clr-namespace:MemoryGame.ViewModel.GameWindow"
+        xmlns:cell="clr-namespace:MemoryGame.ViewModel.GameCellControl"
         mc:Ignorable="d"
         Title="PlayWindow" Height="550" Width="800"
-        Background="LightSeaGreen">
+        Background="LightSeaGreen"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -18,8 +20,12 @@
     </Window.Resources>
 
     <Grid>
-
-        <DockPanel LastChildFill="False" Background="LightSeaGreen">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+            
+        <DockPanel Grid.Row="0" LastChildFill="False" Background="LightSeaGreen">
 
             <Grid DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
@@ -34,9 +40,13 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <Menu Grid.Column="0" Background="Transparent">
+                <Menu Grid.Column="0" Background="Transparent" Height="44" VerticalAlignment="Bottom">
                     <MenuItem Header="File" Style="{StaticResource MenuItemStyleOrange}" Width="45" Height="33">
-                        <MenuItem Header="Category" Style="{StaticResource MenuItemStyleTurquoise}" />
+                        <MenuItem Header="Category" Style="{StaticResource MenuItemStyleTurquoise}">
+                            <MenuItem Header="League" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenLeagueCommand}"/>
+                            <MenuItem Header="Rock Albums" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenRockCommand}"/>
+                            <MenuItem Header="Beer" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenBeerCommand}"/>
+                        </MenuItem>
                         <MenuItem Header="New Game" Style="{StaticResource MenuItemStyleTurquoise}" Command="{Binding NewGameCommand}"/>
                         <MenuItem Header="Open Game" Style="{StaticResource MenuItemStyleTurquoise}"/>
                         <MenuItem Header="Save Game" Style="{StaticResource MenuItemStyleTurquoise}"/>
@@ -44,7 +54,7 @@
                         <MenuItem Header="Exit" Style="{StaticResource MenuItemStyleTurquoise}"/>
                     </MenuItem>
                     <MenuItem Header="Options" Style="{StaticResource MenuItemStyleOrange}" Width="61">
-                        <MenuItem Header="Standard" Style="{StaticResource MenuItemStyleTurquoise}"/>
+                        <MenuItem Header="Standard" Style="{StaticResource MenuItemStyleTurquoise}" Command="{Binding StandardGameCommand}"/>
                         <MenuItem Header="Custom" Style="{StaticResource MenuItemStyleTurquoise}" Command="{Binding CustomGameCommand}"/>
                         <MenuItem Header="Time" Style="{StaticResource MenuItemStyleTurquoise}"/>
                     </MenuItem>
@@ -57,10 +67,38 @@
                 <Label Grid.Column="4" Content="GameTime:" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
 
                 <TextBox Grid.Column="5" Width="50" Text="{Binding ChosenGameTime,UpdateSourceTrigger=PropertyChanged}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" IsReadOnly="{Binding IsChosenGameTimeReadOnly}"/>
 
                 <Label Grid.Column="6" Content="Seconds" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
             </Grid>
         </DockPanel>
+        <Grid Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding GameBoardCells}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ItemsControl ItemsSource="{Binding}"
+                              HorizontalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:GameCellControl DataContext="{Binding}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 </Window>

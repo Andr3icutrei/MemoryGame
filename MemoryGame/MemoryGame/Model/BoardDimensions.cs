@@ -13,6 +13,7 @@ namespace MemoryGame.Model
         private string rows;
         private string columns;
         private bool areValidDimensions;
+        public bool RowDimension { get; set; }
         public string Rows
         {
             get { return rows; }
