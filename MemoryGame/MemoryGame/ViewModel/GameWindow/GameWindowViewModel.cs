@@ -32,18 +32,15 @@ namespace MemoryGame.ViewModel.GameWindow
     }
     public class GameWindowViewModel : INotifyPropertyChanged
     {
-        private IWindowService windowService { get; set; }
-        private SelectBoardDimensionsWindow selectBoardDimensionsWindow { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
-        public BoardDimensions Dimensions { get; set; }
-        public ICommand NewGameCommand { get; }
+        //commands
         public ICommand CustomGameCommand { get; }
         public ICommand ChosenLeagueCommand { get; }
         public ICommand ChosenRockCommand { get; }
         public ICommand ChosenBeerCommand { get; }
         public ICommand FlipCommand { get; }
         public ICommand StandardGameCommand { get; }
-
+        // game catergory
         private CategoryType chosenCategoryType;
         public CategoryType ChosenCategoryType
         {
@@ -54,6 +51,11 @@ namespace MemoryGame.ViewModel.GameWindow
                 OnPropertyChanged(nameof(ChosenCategoryType));
             }
         }
+        // custom game size window
+        private IWindowService windowService { get; set; }
+        private SelectBoardDimensionsWindow selectBoardDimensionsWindow { get; set; }
+        public BoardDimensions Dimensions { get; set; }
+        // game logic
         private UInt16 cardMatches { get; set; }
 
         private GameCellControlViewModel firstSelectedCell { get; set; }
@@ -103,8 +105,7 @@ namespace MemoryGame.ViewModel.GameWindow
             ChosenGameTime = String.Empty;
             IsChosenGameTimeReadOnly = false;
 
-            NewGameCommand = new RelayCommand(StartNewGame, CanExecute_NewGame);
-            CustomGameCommand = new RelayCommand(ButtonCustomGameClick);
+            CustomGameCommand = new RelayCommand(ButtonCustomGameClick, CanExecute_NewGame);
             ChosenLeagueCommand = new RelayCommand(ButtonChosenLeagueCategory);
             ChosenRockCommand = new RelayCommand(ButtonChosenRockCategory);
             ChosenBeerCommand = new RelayCommand(ButtonChosenBeerCategory);
@@ -115,11 +116,11 @@ namespace MemoryGame.ViewModel.GameWindow
 
         private void StartStandardGame()
         {
+            // default size of 4x4
             Dimensions.Rows = 4.ToString();
             Dimensions.Columns = 4.ToString();
             StartNewGame();
         }
-
         private void InitializeGameTimer()
         {
             gameTimer = new DispatcherTimer();
@@ -138,7 +139,6 @@ namespace MemoryGame.ViewModel.GameWindow
             isChosenGameTimeReadOnly = false;
             gameTimer.Stop();
         }
-
         private void GameTimer_Tick(object sender, EventArgs e)
         {
             if (Convert.ToInt32(ChosenGameTime) == 0)

@@ -47,7 +47,6 @@
                             <MenuItem Header="Rock Albums" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenRockCommand}"/>
                             <MenuItem Header="Beer" Style="{StaticResource MenuItemStyleOrange}" Command="{Binding ChosenBeerCommand}"/>
                         </MenuItem>
-                        <MenuItem Header="New Game" Style="{StaticResource MenuItemStyleTurquoise}" Command="{Binding NewGameCommand}"/>
                         <MenuItem Header="Open Game" Style="{StaticResource MenuItemStyleTurquoise}"/>
                         <MenuItem Header="Save Game" Style="{StaticResource MenuItemStyleTurquoise}"/>
                         <MenuItem Header="Stats" Style="{StaticResource MenuItemStyleTurquoise}"/>
@@ -61,6 +60,7 @@
                     <MenuItem Header="Help" Style="{StaticResource MenuItemStyleOrange}" Height="34" Width="47">
                         <MenuItem Header="About" Style="{StaticResource MenuItemStyleTurquoise}"/>
                     </MenuItem>
+                    <TextBlock Text="Note: select a category from file and the desired number of seconds for the game" Foreground="White"/>
                 </Menu>
 
 
