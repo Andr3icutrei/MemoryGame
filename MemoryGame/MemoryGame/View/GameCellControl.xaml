@@ -7,7 +7,6 @@
 
     <UserControl.Resources>
         <converter:BoolToVisibilityConverterService x:Key="BoolToVisConverter"/>
-        <converter:StringToImageSourceService x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext}">

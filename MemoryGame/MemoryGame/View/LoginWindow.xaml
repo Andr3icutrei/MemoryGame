@@ -37,6 +37,7 @@
                 <ColumnDefinition Width="Auto" MinWidth="250" />
             </Grid.ColumnDefinitions>
 
+
             <ListBox Grid.Column="0" Margin="45,61,45,37" ItemsSource="{Binding ListboxUserItems}" 
                      SelectedItem="{Binding SelectedUser}" SelectedIndex="{Binding SelectedUserIndex}">
                 <ListBox.ItemTemplate>
@@ -64,11 +65,6 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0" Content="&lt;&lt;" Width="77" Height="36" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ButtonStyleOrange}" 
-                            Command="{Binding ButtonLeftArrowClick}"/>
-                    <Button Grid.Column="1" Content="&gt;&gt;" Width="75" Height="35" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource ButtonStyleOrange}"
-                            Command="{Binding ButtonRightArrowClick}"/>
                 </Grid>
             </Grid>
 

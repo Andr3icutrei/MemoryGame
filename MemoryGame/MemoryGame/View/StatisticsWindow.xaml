@@ -1,0 +1,50 @@
+﻿<Window x:Class="MemoryGame.View.StatisticsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MemoryGame.View"
+        mc:Ignorable="d"
+        Title="StatisticsWindow" Height="450" Width="800">
+
+    <Grid Background="BlueViolet">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="54"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="21,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Username" Foreground="White" Grid.Column="0" FontWeight="Bold" Padding="5" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="Games Played" Foreground="White" Grid.Column="1" FontWeight="Bold" Padding="5" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="Games Won" Foreground="White" Grid.Column="2" FontWeight="Bold" Padding="5" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+        </Grid>
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding Users}" Background="DodgerBlue"
+            Margin="10,8,10,10">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Username}" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"/>
+                        <TextBlock Text="{Binding GamesPlayed}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"/>
+                        <TextBlock Text="{Binding GamesWon}" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

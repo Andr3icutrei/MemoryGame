@@ -46,7 +46,11 @@ namespace MemoryGame.ViewModel.Login
             {
                 selectedUserIndex = value;
                 if (selectedUserIndex == -1)
+                {
                     selectedUserIndex = 0;
+                    UserImage = LoginImagesLoadService.Images[0];
+                    return;
+                }
                 UserImage = LoginImagesLoadService.Images[ListboxUserItems[selectedUserIndex].ImageIndex];
                 OnPropertyChanged(nameof(SelectedUserIndex));
             }
@@ -57,6 +61,8 @@ namespace MemoryGame.ViewModel.Login
         private ImageSource userImage;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public View.GameWindow GameWindow { get; set; }
 
         public ImageSource UserImage
         {
@@ -119,6 +125,9 @@ namespace MemoryGame.ViewModel.Login
             if (SharedVM.BoundUser.IsAdded)
             {
                 User newUser = new User(SharedVM.BoundUser);
+                newUser.GamesPlayed = 0;
+                newUser.GamesWon = 0;
+                SelectedUser = newUser;
                 ListboxUserItems.Add(newUser);
                 UserImage = LoginImagesLoadService.Images[SharedVM.BoundUser.ImageIndex];
             }
@@ -127,13 +136,14 @@ namespace MemoryGame.ViewModel.Login
         private void Execute_DeleteUserClick()
         {
             int index = SelectedUserIndex;
+            JsonSerializerService.DeleteUser(SelectedUser.Username);
             ListboxUserItems.RemoveAt(index);
         }
 
         private void Execute_PlayClick()
         {
-            View.GameWindow gameWindow = new View.GameWindow(SelectedUser);
-            gameWindow.Show();
+            GameWindow = new View.GameWindow(SelectedUser,ListboxUserItems);
+            GameWindow.Show();
         }
 
         private void Execute_CancelClick()

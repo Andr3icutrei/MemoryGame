@@ -9,6 +9,28 @@ namespace MemoryGame.Model
 {
     public class User : INotifyPropertyChanged
     {
+        private UInt16 gamesPlayed;
+        public UInt16 GamesPlayed
+        {
+            get { return gamesPlayed; }
+            set
+            {
+                gamesPlayed = value;
+                OnPropertyChanged(nameof(GamesPlayed));
+            }
+        }
+
+        private UInt16 gamesWon;
+        public UInt16 GamesWon
+        {
+            get { return gamesWon; }
+            set
+            {
+                gamesWon = value;
+                OnPropertyChanged(nameof(GamesWon));
+            }
+        }
+
         private string username;
         public string Username
         {
@@ -36,13 +58,17 @@ namespace MemoryGame.Model
             Username = username;
             ImageIndex = 0;
             IsAdded = true;
+            GamesPlayed = 0;
+            GamesWon = 0;
         }
 
-        public User(string username,bool isAdded,UInt16 imageIndex)
+        public User(string username,bool isAdded,UInt16 imageIndex,UInt16 gamesPlayed,UInt16 gamesWon)
         {
             Username = username;
             IsAdded = isAdded;
             ImageIndex = imageIndex;
+            GamesPlayed = gamesPlayed;
+            GamesWon = gamesWon;
         }
 
         public User(User boundUser)
@@ -50,6 +76,8 @@ namespace MemoryGame.Model
             Username = boundUser.Username;
             ImageIndex = boundUser.ImageIndex;
             IsAdded = boundUser.IsAdded;
+            GamesWon = boundUser.GamesWon;
+            GamesPlayed = boundUser.GamesPlayed;
         }
 
         public User()
@@ -57,6 +85,8 @@ namespace MemoryGame.Model
             Username = String.Empty;
             ImageIndex = 0;
             IsAdded = true;
+            GamesPlayed = 0;
+            GamesWon = 0;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

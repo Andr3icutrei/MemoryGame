@@ -14,12 +14,14 @@ using MemoryGame.Services;
 using MemoryGame.View;
 using MemoryGame.ViewModel.SelectBoardDimensions;
 using MemoryGame.ViewModel.GameCellControl;
+using MemoryGame.ViewModel.StatisticsWindow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualBasic;
 using System.Windows.Threading;
-
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace MemoryGame.ViewModel.GameWindow
 {
@@ -42,6 +44,8 @@ namespace MemoryGame.ViewModel.GameWindow
         public ICommand StandardGameCommand { get; }
         public ICommand SaveGameCommand { get; }
         public ICommand LoadGameCommand { get; }
+        public ICommand ShowStatsCommand { get; }
+        public ICommand HelpCommand { get; }
         // game catergory
         private CategoryType chosenCategoryType;
         public CategoryType ChosenCategoryType
@@ -55,10 +59,11 @@ namespace MemoryGame.ViewModel.GameWindow
         }
         // custom game size window
         private IWindowService windowService { get; set; }
+
         private SelectBoardDimensionsWindow selectBoardDimensionsWindow { get; set; }
         public BoardDimensions Dimensions { get; set; }
         // game logic
-        private UInt16 cardMatches { get; set; }
+        private Int16 cardMatches { get; set; }
         private GameCellControlViewModel firstSelectedCell { get; set; }
         private GameCellControlViewModel secondSelectedCell { get; set; }
         public ObservableCollection<ImageSource> ChosenImages { get; set; }
@@ -102,8 +107,9 @@ namespace MemoryGame.ViewModel.GameWindow
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        private ObservableCollection<User> allUsers;
 
-        public GameWindowViewModel(User u)
+        public GameWindowViewModel(User u,ObservableCollection<User> users)
         {
             ChosenGameTime = String.Empty;
             IsChosenGameTimeReadOnly = false;
@@ -115,10 +121,66 @@ namespace MemoryGame.ViewModel.GameWindow
             StandardGameCommand = new RelayCommand(StartStandardGame, CanExecute_NewGame);
             SaveGameCommand = new RelayCommand(SaveCurrentGame, CanExecute_SaveCurrentGame);
             LoadGameCommand = new RelayCommand(LoadCurrentGame, CanExecute_LoadCurrentGame);
+            ShowStatsCommand = new RelayCommand(ShowStatsWindow);
+            HelpCommand = new RelayCommand(HelpClick);
 
             GameUser = u;
+            allUsers = users;
 
             ChosenCategoryType = CategoryType.Invalid;
+        }
+
+        private void HelpClick()
+        {
+            string email = "andrei.arustei@student.unitbv.com";
+            string message = "10LF331\nInformatica aplicata\nArustei Andrei";
+
+            // Create the TextBlock with a Hyperlink
+            TextBlock textBlock = new TextBlock();
+            textBlock.Inlines.Add("Click here to send an email to: ");
+
+            Hyperlink hyperlink = new Hyperlink(new Run(email))
+            {
+                NavigateUri = new Uri($"mailto:{email}")
+            };
+
+            // Handle the click event to start the default email client
+            hyperlink.RequestNavigate += (sender, args) =>
+            {
+                try
+                {
+                    // Use Process.Start to open the default email client
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = args.Uri.ToString(),
+                        UseShellExecute = true // Ensure the URI is opened with the default handler
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            };
+
+            textBlock.Inlines.Add(hyperlink);
+            textBlock.Inlines.Add("\n" + message);
+
+            // Create a custom Window for displaying the message
+            Window customMessageBox = new Window
+            {
+                Title = "Email Link",
+                Width = 400,
+                Height = 120,
+                Content = textBlock
+            };
+
+            customMessageBox.ShowDialog();
+        }
+
+        private void ShowStatsWindow()
+        {
+            MemoryGame.View.StatisticsWindow w = new MemoryGame.View.StatisticsWindow(allUsers);
+            w.Show();
         }
 
         private void SaveCurrentGame()
@@ -129,12 +191,41 @@ namespace MemoryGame.ViewModel.GameWindow
         private void LoadCurrentGame()
         {
             SavedGameDTO savedGameDTO = UserGameSerializerService.LoadGame(GameUser.Username);
-            GameUser = new User(savedGameDTO.Username,savedGameDTO.IsAdded,savedGameDTO.ImageIndex);
-            
+
+            if (savedGameDTO.GamesPlayed == 0)
+            { 
+                MessageBox.Show("You have not saved a game before!");
+                return; 
+            }
+
+            GameUser.Username = savedGameDTO.Username;
+            GameUser.IsAdded = savedGameDTO.IsAdded;
+            GameUser.ImageIndex = savedGameDTO.ImageIndex;
+            GameUser.GamesPlayed = savedGameDTO.GamesPlayed;
+            GameUser.GamesWon = savedGameDTO.GamesWon;
+
             ChosenCategoryType = savedGameDTO.ChosenCategoryType;
             Dimensions = savedGameDTO.Dimensions;
+            ChosenImages = GameImagesLoadService.LoadImages(chosenCategoryType, Dimensions);
             GameBoardCells = savedGameDTO.GameBoardCells;
             ChosenGameTime = savedGameDTO.ChosenGameTime;
+
+            cardMatches = -1;
+            for (UInt16 i = 0; i < int.Parse(Dimensions.Rows); i++)
+            {
+                for (UInt16 j = 0; j < int.Parse(Dimensions.Columns); j++)
+                {
+                    GameBoardCells[i][j].FlipCommand = new RelayCommand<GameCellControlViewModel>(FlipCardClick);
+                    GameBoardCells[i][j].FrontCardImageSource = ChosenImages[GameBoardCells[i][j].Cell.ImageIndex];
+                    if (GameBoardCells[i][j].IsMatched)
+                    { 
+                        cardMatches++; Debug.Print(GameBoardCells[i][j].Cell.ToString());
+                    }
+                }
+            }
+            
+            GameUser.GamesPlayed++;
+            InitializeGameTimer();
         }
 
         private bool CanExecute_SaveCurrentGame()
@@ -150,6 +241,7 @@ namespace MemoryGame.ViewModel.GameWindow
         private void StartStandardGame()
         {
             // default size of 4x4
+            Dimensions = new BoardDimensions();
             Dimensions.Rows = 4.ToString();
             Dimensions.Columns = 4.ToString();
             StartNewGame();
@@ -169,7 +261,8 @@ namespace MemoryGame.ViewModel.GameWindow
             secondSelectedCell = null;
             cardMatches = 0;
             isCardClickBusy = false;
-            isChosenGameTimeReadOnly = false;
+            IsChosenGameTimeReadOnly = false;
+
             gameTimer.Stop();
         }
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -215,8 +308,8 @@ namespace MemoryGame.ViewModel.GameWindow
 
                 for (UInt16 j = 0; j < int.Parse(Dimensions.Columns); j++)
                 {
-                    GameCellControlViewModel cell = new GameCellControlViewModel(i, j, combined[k], ChosenImages[combined[k]],
-                        new RelayCommand<GameCellControlViewModel>(FlipCardClick));
+                    GameCellControlViewModel cell = new GameCellControlViewModel(i, j, combined[k], ChosenImages[combined[k]]);
+                    cell.FlipCommand = new RelayCommand<GameCellControlViewModel>(FlipCardClick);
                     rowToReturn.Add(cell);
                     k++;
                 }
@@ -238,6 +331,7 @@ namespace MemoryGame.ViewModel.GameWindow
 
         private void StartNewGame() // when the second window is closed this is called
         {
+            GameUser.GamesPlayed++;
             if (!CanExecute_NewGame())
             {
                 MessageBox.Show("Select a category from File item or choose the desired time!");
@@ -310,6 +404,7 @@ namespace MemoryGame.ViewModel.GameWindow
                     cardMatches++;
                     if (cardMatches == ChosenImages.Count)
                     {
+                        GameUser.GamesWon++;
                         MessageBox.Show("You won!");
                         ResetRound();
                     }

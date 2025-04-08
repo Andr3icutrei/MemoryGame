@@ -13,15 +13,15 @@ namespace MemoryGame.Services
 {
     public static class LoginImagesLoadService
     {
-        private static readonly string LoginImagesPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "LoginImages");
+        private static readonly string _loginImagesPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "LoginImages");
         
         public static ObservableCollection<ImageSource> Images { get; set; }
         private static void LoadImages()
         {
             Images = new ObservableCollection<ImageSource>();
-            if (Directory.Exists(LoginImagesPath))
+            if (Directory.Exists(_loginImagesPath))
             {
-                string[] files = Directory.GetFiles(LoginImagesPath, "*.jpg");
+                string[] files = Directory.GetFiles(_loginImagesPath, "*.jpg");
                 foreach (string file in files)
                 {
                     BitmapImage image = new BitmapImage();

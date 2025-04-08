@@ -28,6 +28,7 @@ namespace MemoryGame.ViewModel.GameCellControl
                 OnPropertyChanged(nameof(FrontCardImageSource));
             }
         }
+        [JsonIgnore]
         public ICommand FlipCommand { get; set; }
 
         private bool isCardFaceUp;
@@ -66,14 +67,13 @@ namespace MemoryGame.ViewModel.GameCellControl
             }
         }
 
-        public GameCellControlViewModel(int i,int j,int imageIndex,ImageSource source,RelayCommand<GameCellControlViewModel> command)
+        public GameCellControlViewModel(int i,int j,int imageIndex,ImageSource source)
         {
             IsCardFaceDown = true;
             IsCardFaceUp = !IsCardFaceDown;
             IsMatched = IsSelected = false;
             Cell = new GameCell((UInt16)i, (UInt16)j, (UInt16)imageIndex);
             FrontCardImageSource = source;
-            FlipCommand = command;
         }
 
         public GameCellControlViewModel()

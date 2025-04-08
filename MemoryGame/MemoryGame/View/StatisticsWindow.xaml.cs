@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,18 +12,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using MemoryGame.ViewModel.GameWindow;
 using MemoryGame.Model;
-using System.Collections.ObjectModel;
+using MemoryGame.ViewModel.StatisticsWindow;
 
 namespace MemoryGame.View
 {
-    public partial class GameWindow : Window
+    /// <summary>
+    /// Interaction logic for StatisticsWindow.xaml
+    /// </summary>
+    public partial class StatisticsWindow : Window
     {
-        public GameWindow(User u,ObservableCollection<User> users)
+        public StatisticsWindow(ObservableCollection<User> users)
         {
             InitializeComponent();
-            DataContext = new GameWindowViewModel(u,users);
+            DataContext = new StatisticsWindowViewModel(users);
         }
     }
 }
