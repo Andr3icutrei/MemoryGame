@@ -31,8 +31,18 @@ namespace MemoryGame.Services
             return new SavedGameDTO();
         }
 
-        public static void SaveGame(User user,GameWindowViewModel vm)
+        public static void SaveGame(User user, GameWindowViewModel vm)
         {
+            List<SavedGameDTO> existingUsers = new List<SavedGameDTO>();
+
+            if (File.Exists(_filepathUsers))
+            {
+                string existingJson = File.ReadAllText(_filepathUsers);
+                existingUsers = JsonSerializer.Deserialize<List<SavedGameDTO>>(existingJson) ?? new List<SavedGameDTO>();
+            }
+
+            Dictionary<string, SavedGameDTO> userDict = existingUsers.ToDictionary(u => u.Username, u => u);
+
             var dto = new SavedGameDTO
             {
                 Username = user.Username,
@@ -41,14 +51,21 @@ namespace MemoryGame.Services
                 GamesPlayed = user.GamesPlayed,
                 GamesWon = user.GamesWon,
                 ChosenCategoryType = (CategoryType)vm.ChosenCategoryType,
-                Dimensions = vm.Dimensions, 
+                Dimensions = vm.Dimensions,
                 GameBoardCells = vm.GameBoardCells,
                 ChosenGameTime = vm.ChosenGameTime,
             };
 
-            var dtoList = new List<SavedGameDTO> { dto };
-            var json = JsonSerializer.Serialize(dtoList, new JsonSerializerOptions { WriteIndented = true });
+            if (userDict.ContainsKey(user.Username))
+            {
+                userDict[user.Username] = dto;
+            }
+            else
+            {
+                userDict.Add(user.Username, dto);
+            }
 
+            string json = JsonSerializer.Serialize(userDict.Values.ToList(), new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_filepathUsers, json);
         }
         #endregion

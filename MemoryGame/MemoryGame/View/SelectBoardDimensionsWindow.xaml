@@ -18,17 +18,18 @@
     </Window.Resources>
 
     <StackPanel Margin="10">
-        <TextBlock Text="NO rows and columns Rows and Columns&#x0A;Cannot be at the same time&#x0A; odd numbers" Foreground="White" Margin="2,2,2,2" Padding="5" Height="65"/>
+        
         <TextBlock Text="Rows:" Foreground="White"/>
         <TextBox Text="{Binding Dimensions.Rows,UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Text="Columns:" Foreground="White"/>
         <TextBox Text="{Binding Dimensions.Columns,UpdateSourceTrigger=PropertyChanged}"/>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="OK" Style="{StaticResource ButtonStyleOrange}" Height="22" Width="30"
                     Command="{Binding ButtonOKCommand}"/>
             <Button Content="Cancel" Margin="5,0,0,0" Style="{StaticResource ButtonStyleOrange}" Height="23"
                     Command="{Binding ButtonCancelCommand}"/>
         </StackPanel>
-        <TextBlock FontSize="12"><Run Text="Note: rows and columns values"/><LineBreak /><Run Text="shall be between 2 and 6"/></TextBlock>
+        <TextBlock FontSize="12" HorizontalAlignment="Center"><Run Text="Note: rows and columns values" Foreground="White"/><LineBreak /><Run Text="shall be between 2 and 6" Foreground="White" /></TextBlock>
+        <TextBlock Text="Note: NO rows and columns Rows and Columns&#x0A;Cannot be at the same time&#x0A; odd numbers" Foreground="White" Margin="2,2,2,2" Padding="5" Height="65"/>
     </StackPanel>
 </Window>

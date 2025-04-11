@@ -49,53 +49,53 @@ namespace MemoryGame.ViewModel.GameWindow
         #endregion
 
         #region Catergories
-        private CategoryType chosenCategoryType;
+        private CategoryType _chosenCategoryType;
         public CategoryType ChosenCategoryType
         {
-            get => chosenCategoryType;
+            get => _chosenCategoryType;
             set
             {
-                chosenCategoryType = value;
+                _chosenCategoryType = value;
                 OnPropertyChanged(nameof(ChosenCategoryType));
                 ChosenCategoryToString = "Category: " + CategoryTypeToStringService.CategoryTypeToString(ChosenCategoryType);
             }
         }
         #endregion
 
-        private IWindowService windowService { get; set; }
+        private IWindowService _windowService { get; set; }
 
         #region Private fields
-        private string chosenCategoryToString;
-        private SelectBoardDimensionsWindow selectBoardDimensionsWindow { get; set; }
-        private Int16 cardMatches { get; set; }
-        private GameCellControlViewModel firstSelectedCell { get; set; }
-        private GameCellControlViewModel secondSelectedCell { get; set; }
-        private ObservableCollection<ObservableCollection<GameCellControlViewModel>> gameBoardCells;
-        private DispatcherTimer gameTimer;
-        private bool isCardClickBusy;
-        private bool isChosenGameTimeReadOnly;
-        private string chosenGameTime;
-        private User GameUser { get; set; }
-        private string currentUsername;
-        private ObservableCollection<User> allUsers;
+        private string _chosenCategoryToString;
+        private SelectBoardDimensionsWindow _selectBoardDimensionsWindow { get; set; }
+        private Int16 _cardMatches { get; set; }
+        private GameCellControlViewModel _firstSelectedCell { get; set; }
+        private GameCellControlViewModel _secondSelectedCell { get; set; }
+        private ObservableCollection<ObservableCollection<GameCellControlViewModel>> _gameBoardCells;
+        private DispatcherTimer _gameTimer;
+        private bool _isCardClickBusy;
+        private bool _isChosenGameTimeReadOnly;
+        private string _chosenGameTime;
+        private User _gameUser { get; set; }
+        private string _currentUsername;
+        private ObservableCollection<User> _allUsers;
         #endregion
 
         #region Public properties
         public string CurrentUsername
         {
-            get => currentUsername;
+            get => _currentUsername;
             set
             {
-                currentUsername = value;
+                _currentUsername = value;
                 OnPropertyChanged(nameof(CurrentUsername));
             }
         }
         public string ChosenCategoryToString
         {
-            get => chosenCategoryToString;
+            get => _chosenCategoryToString;
             set
             {
-                chosenCategoryToString = value;
+                _chosenCategoryToString = value;
                 OnPropertyChanged(nameof(ChosenCategoryToString));
             }
         }
@@ -103,29 +103,29 @@ namespace MemoryGame.ViewModel.GameWindow
         public ObservableCollection<ImageSource> ChosenImages { get; set; }
         public ObservableCollection<ObservableCollection<GameCellControlViewModel>> GameBoardCells
         {
-            get => gameBoardCells;
+            get => _gameBoardCells;
             set
             {
-                gameBoardCells = value;
+                _gameBoardCells = value;
                 OnPropertyChanged(nameof(GameBoardCells));
             }
         }
         public string ChosenGameTime
         {
-            get => chosenGameTime;
+            get => _chosenGameTime;
             set
             {
-                chosenGameTime = value;
+                _chosenGameTime = value;
                 OnPropertyChanged(nameof(ChosenGameTime));
             }
         }
 
         public bool IsChosenGameTimeReadOnly
         {
-            get => isChosenGameTimeReadOnly;
+            get => _isChosenGameTimeReadOnly;
             set
             {
-                isChosenGameTimeReadOnly = value;
+                _isChosenGameTimeReadOnly = value;
                 OnPropertyChanged(nameof(IsChosenGameTimeReadOnly));
             }
         }
@@ -137,7 +137,7 @@ namespace MemoryGame.ViewModel.GameWindow
         }
 
         #region Constructor
-        public GameWindowViewModel(User u,ObservableCollection<User> users)
+        public GameWindowViewModel(User u, ObservableCollection<User> users)
         {
             ChosenGameTime = String.Empty;
             IsChosenGameTimeReadOnly = false;
@@ -154,9 +154,9 @@ namespace MemoryGame.ViewModel.GameWindow
             ShowStatsCommand = new RelayCommand(ShowStatsWindow);
             HelpCommand = new RelayCommand(HelpClick);
 
-            GameUser = u;
-            CurrentUsername = "User: "+ GameUser.Username;
-            allUsers = users;
+            _gameUser = u;
+            CurrentUsername = "User: " + _gameUser.Username;
+            _allUsers = users;
 
             ChosenCategoryType = CategoryType.Invalid;
         }
@@ -208,7 +208,7 @@ namespace MemoryGame.ViewModel.GameWindow
         }
         private async void FlipCardClick(object parameter)
         {
-            if (isCardClickBusy)
+            if (_isCardClickBusy)
                 return;
 
             GameCellControlViewModel cellVM = parameter as GameCellControlViewModel;
@@ -219,54 +219,54 @@ namespace MemoryGame.ViewModel.GameWindow
 
             FlipCard(cellVM);
 
-            if (firstSelectedCell == null)
+            if (_firstSelectedCell == null)
             {
-                firstSelectedCell = cellVM;
-                SelectCell(firstSelectedCell, cellVM);
+                _firstSelectedCell = cellVM;
+                SelectCell(_firstSelectedCell, cellVM);
                 return;
             }
 
-            if (secondSelectedCell == null)
+            if (_secondSelectedCell == null)
             {
-                secondSelectedCell = cellVM;
-                SelectCell(secondSelectedCell, cellVM);
+                _secondSelectedCell = cellVM;
+                SelectCell(_secondSelectedCell, cellVM);
             }
 
-            if (firstSelectedCell != null && secondSelectedCell != null &&
-                firstSelectedCell.IsSelected && secondSelectedCell.IsSelected)
+            if (_firstSelectedCell != null && _secondSelectedCell != null &&
+                _firstSelectedCell.IsSelected && _secondSelectedCell.IsSelected)
             {
-                isCardClickBusy = true;
-                await Task.Delay(2000);
-                isCardClickBusy = false;
-                if (firstSelectedCell.Cell.ImageIndex == secondSelectedCell.Cell.ImageIndex)
+                _isCardClickBusy = true;
+                await Task.Delay(1300);
+                _isCardClickBusy = false;
+                if (_firstSelectedCell.Cell.ImageIndex == _secondSelectedCell.Cell.ImageIndex)
                 {
-                    RemoveCell(firstSelectedCell);
-                    RemoveCell(secondSelectedCell);
+                    RemoveCell(_firstSelectedCell);
+                    RemoveCell(_secondSelectedCell);
 
-                    cardMatches++;
-                    if (cardMatches == ChosenImages.Count)
+                    _cardMatches++;
+                    if (_cardMatches == ChosenImages.Count)
                     {
-                        GameUser.GamesWon++;
+                        _gameUser.GamesWon++;
                         MessageBox.Show("You won!");
                         ResetRound();
                     }
                 }
                 else
                 {
-                    FlipCardToFaceDown(firstSelectedCell);
-                    FlipCardToFaceDown(secondSelectedCell);
+                    FlipCardToFaceDown(_firstSelectedCell);
+                    FlipCardToFaceDown(_secondSelectedCell);
                 }
-                firstSelectedCell = null;
-                secondSelectedCell = null;
+                _firstSelectedCell = null;
+                _secondSelectedCell = null;
             }
         }
 
         private void ButtonCustomGameClick()
         {
             Dimensions = new BoardDimensions();
-            windowService = new WindowService();
+            _windowService = new WindowService();
 
-            windowService.ShowWindow<SelectBoardDimensionsViewModel>(
+            _windowService.ShowWindow<SelectBoardDimensionsViewModel>(
                 new object[] { Dimensions }, // pass the dimensions param
                 StartNewGame // this is the supervisor callback
             );
@@ -287,38 +287,38 @@ namespace MemoryGame.ViewModel.GameWindow
 
         private void ShowStatsWindow()
         {
-            MemoryGame.View.StatisticsWindow w = new MemoryGame.View.StatisticsWindow(allUsers);
+            MemoryGame.View.StatisticsWindow w = new MemoryGame.View.StatisticsWindow(_allUsers);
             w.Show();
         }
 
         private void SaveCurrentGame()
         {
-            UserGameSerializerService.SaveGame(GameUser,this);
+            UserGameSerializerService.SaveGame(_gameUser, this);
         }
 
         private void LoadCurrentGame()
         {
-            SavedGameDTO savedGameDTO = UserGameSerializerService.LoadGame(GameUser.Username);
+            SavedGameDTO savedGameDTO = UserGameSerializerService.LoadGame(_gameUser.Username);
 
             if (savedGameDTO.GamesPlayed == 0)
-            { 
+            {
                 MessageBox.Show("You have not saved a game before!");
-                return; 
+                return;
             }
 
-            GameUser.Username = savedGameDTO.Username;
-            GameUser.IsAdded = savedGameDTO.IsAdded;
-            GameUser.ImageIndex = savedGameDTO.ImageIndex;
-            GameUser.GamesPlayed = savedGameDTO.GamesPlayed;
-            GameUser.GamesWon = savedGameDTO.GamesWon;
+            _gameUser.Username = savedGameDTO.Username;
+            _gameUser.IsAdded = savedGameDTO.IsAdded;
+            _gameUser.ImageIndex = savedGameDTO.ImageIndex;
+            _gameUser.GamesPlayed = savedGameDTO.GamesPlayed;
+            _gameUser.GamesWon = savedGameDTO.GamesWon;
 
             ChosenCategoryType = savedGameDTO.ChosenCategoryType;
             Dimensions = savedGameDTO.Dimensions;
-            ChosenImages = GameImagesLoadService.LoadImages(chosenCategoryType, Dimensions);
+            ChosenImages = GameImagesLoadService.LoadImages(_chosenCategoryType, Dimensions);
             GameBoardCells = savedGameDTO.GameBoardCells;
             ChosenGameTime = savedGameDTO.ChosenGameTime;
 
-            cardMatches = -1;
+            _cardMatches = -1;
             for (UInt16 i = 0; i < int.Parse(Dimensions.Rows); i++)
             {
                 for (UInt16 j = 0; j < int.Parse(Dimensions.Columns); j++)
@@ -326,17 +326,15 @@ namespace MemoryGame.ViewModel.GameWindow
                     GameBoardCells[i][j].FlipCommand = new RelayCommand<GameCellControlViewModel>(FlipCardClick);
                     GameBoardCells[i][j].FrontCardImageSource = ChosenImages[GameBoardCells[i][j].Cell.ImageIndex];
                     if (GameBoardCells[i][j].IsMatched)
-                    { 
-                        cardMatches++; Debug.Print(GameBoardCells[i][j].Cell.ToString());
+                    {
+                        _cardMatches++; Debug.Print(GameBoardCells[i][j].Cell.ToString());
                     }
                 }
             }
-            
-            GameUser.GamesPlayed++;
+
+            _gameUser.GamesPlayed++;
             InitializeGameTimer();
         }
-
-        
 
         private void StartStandardGame()
         {
@@ -348,7 +346,7 @@ namespace MemoryGame.ViewModel.GameWindow
         }
 
         #endregion
-        #region Can Execute Commands 
+        #region CanExecute Commands 
         private bool CanExecute_SaveCurrentGame()
         {
             return IsChosenGameTimeReadOnly;
@@ -369,22 +367,22 @@ namespace MemoryGame.ViewModel.GameWindow
         #region Methods
         private void InitializeGameTimer()
         {
-            gameTimer = new DispatcherTimer();
-            gameTimer.Interval = TimeSpan.FromSeconds(1);
-            gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Start();
+            _gameTimer = new DispatcherTimer();
+            _gameTimer.Interval = TimeSpan.FromSeconds(1);
+            _gameTimer.Tick += GameTimer_Tick;
+            _gameTimer.Start();
         }
 
         private void ResetRound()
         {
             GameBoardCells = null;
-            firstSelectedCell = null;
-            secondSelectedCell = null;
-            cardMatches = 0;
-            isCardClickBusy = false;
+            _firstSelectedCell = null;
+            _secondSelectedCell = null;
+            _cardMatches = 0;
+            _isCardClickBusy = false;
             IsChosenGameTimeReadOnly = false;
 
-            gameTimer.Stop();
+            _gameTimer.Stop();
         }
         private void GameTimer_Tick(object sender, EventArgs e)
         {
@@ -405,7 +403,7 @@ namespace MemoryGame.ViewModel.GameWindow
         private void InitializeGameBoardCells()
         {
             GameBoardCells = new ObservableCollection<ObservableCollection<GameCellControlViewModel>>();
-            ChosenImages = GameImagesLoadService.LoadImages(chosenCategoryType, Dimensions);
+            ChosenImages = GameImagesLoadService.LoadImages(_chosenCategoryType, Dimensions);
 
             List<int> duplicated = Enumerable.Range(0, ChosenImages.Count).ToList();
             List<int> combined = Enumerable.Range(0, ChosenImages.Count).ToList();
@@ -444,15 +442,15 @@ namespace MemoryGame.ViewModel.GameWindow
             InitializeGameBoardCells();
             InitializeGameTimer();
 
-            firstSelectedCell = null;
-            secondSelectedCell = null;
-            cardMatches = 0;
-            isCardClickBusy = false;
+            _firstSelectedCell = null;
+            _secondSelectedCell = null;
+            _cardMatches = 0;
+            _isCardClickBusy = false;
         }
 
         private void StartNewGame() // when the second window is closed this is called
         {
-            GameUser.GamesPlayed++;
+            _gameUser.GamesPlayed++;
             if (!CanExecute_NewGame())
             {
                 MessageBox.Show("Select a category from File item or choose the desired time!");

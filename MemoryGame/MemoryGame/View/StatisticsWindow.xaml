@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="StatisticsWindow" Height="450" Width="800">
 
-    <Grid Background="BlueViolet">
+    <Grid Background="Orange">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="54"/>
             <RowDefinition/>
@@ -24,7 +24,7 @@
             <TextBlock Text="Games Won" Foreground="White" Grid.Column="2" FontWeight="Bold" Padding="5" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
         </Grid>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Users}" Background="DodgerBlue"
+        <ListBox Grid.Row="1" ItemsSource="{Binding Users}" Background="Turquoise"
             Margin="10,8,10,10">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">

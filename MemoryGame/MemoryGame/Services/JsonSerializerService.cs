@@ -52,15 +52,14 @@ namespace MemoryGame.Services
                         ChosenCategoryType = CategoryType.Invalid
                     };
 
-                    if (!userDict.ContainsKey(user.Username)) // user non existent
+                    if (!userDict.ContainsKey(user.Username)) //user non existent
                     {
-                        
                         userDict.Add(user.Username, savedGameDTO);
                     }
-                    else // existent user 
+                    else //existent user 
                     {
-                        var existing = userDict[user.Username];
-                        userDict[user.Username] = savedGameDTO;
+                        //var existing = userDict[user.Username];
+                        //userDict[user.Username] = savedGameDTO;
                     }
                 }
 
