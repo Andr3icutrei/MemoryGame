@@ -35,7 +35,7 @@ namespace MemoryGame.ViewModel.GameWindow
     public class GameWindowViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        //commands
+        #region Commands
         public ICommand CustomGameCommand { get; }
         public ICommand ChosenLeagueCommand { get; }
         public ICommand ChosenRockCommand { get; }
@@ -46,7 +46,9 @@ namespace MemoryGame.ViewModel.GameWindow
         public ICommand LoadGameCommand { get; }
         public ICommand ShowStatsCommand { get; }
         public ICommand HelpCommand { get; }
-        // game catergory
+        #endregion
+
+        #region Catergories
         private CategoryType chosenCategoryType;
         public CategoryType ChosenCategoryType
         {
@@ -55,19 +57,50 @@ namespace MemoryGame.ViewModel.GameWindow
             {
                 chosenCategoryType = value;
                 OnPropertyChanged(nameof(ChosenCategoryType));
+                ChosenCategoryToString = "Category: " + CategoryTypeToStringService.CategoryTypeToString(ChosenCategoryType);
             }
         }
-        // custom game size window
+        #endregion
+
         private IWindowService windowService { get; set; }
 
+        #region Private fields
+        private string chosenCategoryToString;
         private SelectBoardDimensionsWindow selectBoardDimensionsWindow { get; set; }
-        public BoardDimensions Dimensions { get; set; }
-        // game logic
         private Int16 cardMatches { get; set; }
         private GameCellControlViewModel firstSelectedCell { get; set; }
         private GameCellControlViewModel secondSelectedCell { get; set; }
-        public ObservableCollection<ImageSource> ChosenImages { get; set; }
         private ObservableCollection<ObservableCollection<GameCellControlViewModel>> gameBoardCells;
+        private DispatcherTimer gameTimer;
+        private bool isCardClickBusy;
+        private bool isChosenGameTimeReadOnly;
+        private string chosenGameTime;
+        private User GameUser { get; set; }
+        private string currentUsername;
+        private ObservableCollection<User> allUsers;
+        #endregion
+
+        #region Public properties
+        public string CurrentUsername
+        {
+            get => currentUsername;
+            set
+            {
+                currentUsername = value;
+                OnPropertyChanged(nameof(CurrentUsername));
+            }
+        }
+        public string ChosenCategoryToString
+        {
+            get => chosenCategoryToString;
+            set
+            {
+                chosenCategoryToString = value;
+                OnPropertyChanged(nameof(ChosenCategoryToString));
+            }
+        }
+        public BoardDimensions Dimensions { get; set; }
+        public ObservableCollection<ImageSource> ChosenImages { get; set; }
         public ObservableCollection<ObservableCollection<GameCellControlViewModel>> GameBoardCells
         {
             get => gameBoardCells;
@@ -77,7 +110,6 @@ namespace MemoryGame.ViewModel.GameWindow
                 OnPropertyChanged(nameof(GameBoardCells));
             }
         }
-        private string chosenGameTime;
         public string ChosenGameTime
         {
             get => chosenGameTime;
@@ -87,11 +119,7 @@ namespace MemoryGame.ViewModel.GameWindow
                 OnPropertyChanged(nameof(ChosenGameTime));
             }
         }
-        private DispatcherTimer gameTimer;
 
-        private bool isCardClickBusy;
-
-        private bool isChosenGameTimeReadOnly;
         public bool IsChosenGameTimeReadOnly
         {
             get => isChosenGameTimeReadOnly;
@@ -101,18 +129,20 @@ namespace MemoryGame.ViewModel.GameWindow
                 OnPropertyChanged(nameof(IsChosenGameTimeReadOnly));
             }
         }
-        // playing user
-        private User GameUser { get; set; }
+        #endregion
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private ObservableCollection<User> allUsers;
 
+        #region Constructor
         public GameWindowViewModel(User u,ObservableCollection<User> users)
         {
             ChosenGameTime = String.Empty;
             IsChosenGameTimeReadOnly = false;
+
+            ChosenCategoryToString = "Category: ";
 
             CustomGameCommand = new RelayCommand(ButtonCustomGameClick, CanExecute_NewGame);
             ChosenLeagueCommand = new RelayCommand(ButtonChosenLeagueCategory);
@@ -125,17 +155,19 @@ namespace MemoryGame.ViewModel.GameWindow
             HelpCommand = new RelayCommand(HelpClick);
 
             GameUser = u;
+            CurrentUsername = "User: "+ GameUser.Username;
             allUsers = users;
 
             ChosenCategoryType = CategoryType.Invalid;
         }
+        #endregion
 
+        #region Command Implementations
         private void HelpClick()
         {
             string email = "andrei.arustei@student.unitbv.com";
             string message = "10LF331\nInformatica aplicata\nArustei Andrei";
 
-            // Create the TextBlock with a Hyperlink
             TextBlock textBlock = new TextBlock();
             textBlock.Inlines.Add("Click here to send an email to: ");
 
@@ -144,16 +176,15 @@ namespace MemoryGame.ViewModel.GameWindow
                 NavigateUri = new Uri($"mailto:{email}")
             };
 
-            // Handle the click event to start the default email client
             hyperlink.RequestNavigate += (sender, args) =>
             {
                 try
                 {
-                    // Use Process.Start to open the default email client
+
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = args.Uri.ToString(),
-                        UseShellExecute = true // Ensure the URI is opened with the default handler
+                        UseShellExecute = true
                     });
                 }
                 catch (Exception ex)
@@ -165,7 +196,6 @@ namespace MemoryGame.ViewModel.GameWindow
             textBlock.Inlines.Add(hyperlink);
             textBlock.Inlines.Add("\n" + message);
 
-            // Create a custom Window for displaying the message
             Window customMessageBox = new Window
             {
                 Title = "Email Link",
@@ -175,6 +205,84 @@ namespace MemoryGame.ViewModel.GameWindow
             };
 
             customMessageBox.ShowDialog();
+        }
+        private async void FlipCardClick(object parameter)
+        {
+            if (isCardClickBusy)
+                return;
+
+            GameCellControlViewModel cellVM = parameter as GameCellControlViewModel;
+            if (cellVM == null)
+            {
+                return;
+            }
+
+            FlipCard(cellVM);
+
+            if (firstSelectedCell == null)
+            {
+                firstSelectedCell = cellVM;
+                SelectCell(firstSelectedCell, cellVM);
+                return;
+            }
+
+            if (secondSelectedCell == null)
+            {
+                secondSelectedCell = cellVM;
+                SelectCell(secondSelectedCell, cellVM);
+            }
+
+            if (firstSelectedCell != null && secondSelectedCell != null &&
+                firstSelectedCell.IsSelected && secondSelectedCell.IsSelected)
+            {
+                isCardClickBusy = true;
+                await Task.Delay(2000);
+                isCardClickBusy = false;
+                if (firstSelectedCell.Cell.ImageIndex == secondSelectedCell.Cell.ImageIndex)
+                {
+                    RemoveCell(firstSelectedCell);
+                    RemoveCell(secondSelectedCell);
+
+                    cardMatches++;
+                    if (cardMatches == ChosenImages.Count)
+                    {
+                        GameUser.GamesWon++;
+                        MessageBox.Show("You won!");
+                        ResetRound();
+                    }
+                }
+                else
+                {
+                    FlipCardToFaceDown(firstSelectedCell);
+                    FlipCardToFaceDown(secondSelectedCell);
+                }
+                firstSelectedCell = null;
+                secondSelectedCell = null;
+            }
+        }
+
+        private void ButtonCustomGameClick()
+        {
+            Dimensions = new BoardDimensions();
+            windowService = new WindowService();
+
+            windowService.ShowWindow<SelectBoardDimensionsViewModel>(
+                new object[] { Dimensions }, // pass the dimensions param
+                StartNewGame // this is the supervisor callback
+            );
+        }
+        private void ButtonChosenRockCategory()
+        {
+            ChosenCategoryType = CategoryType.RockAlbum;
+        }
+
+        private void ButtonChosenLeagueCategory()
+        {
+            ChosenCategoryType = CategoryType.League;
+        }
+        private void ButtonChosenBeerCategory()
+        {
+            ChosenCategoryType = CategoryType.Beer;
         }
 
         private void ShowStatsWindow()
@@ -228,6 +336,19 @@ namespace MemoryGame.ViewModel.GameWindow
             InitializeGameTimer();
         }
 
+        
+
+        private void StartStandardGame()
+        {
+            // default size of 4x4
+            Dimensions = new BoardDimensions();
+            Dimensions.Rows = 4.ToString();
+            Dimensions.Columns = 4.ToString();
+            StartNewGame();
+        }
+
+        #endregion
+        #region Can Execute Commands 
         private bool CanExecute_SaveCurrentGame()
         {
             return IsChosenGameTimeReadOnly;
@@ -238,14 +359,14 @@ namespace MemoryGame.ViewModel.GameWindow
             return !CanExecute_SaveCurrentGame();
         }
 
-        private void StartStandardGame()
+        private bool CanExecute_NewGame()
         {
-            // default size of 4x4
-            Dimensions = new BoardDimensions();
-            Dimensions.Rows = 4.ToString();
-            Dimensions.Columns = 4.ToString();
-            StartNewGame();
+            int result;
+            return int.TryParse(ChosenGameTime, out result) && ChosenGameTime != String.Empty && ChosenGameTime != "0" && ChosenCategoryType != CategoryType.Invalid;
         }
+        #endregion
+
+        #region Methods
         private void InitializeGameTimer()
         {
             gameTimer = new DispatcherTimer();
@@ -363,91 +484,6 @@ namespace MemoryGame.ViewModel.GameWindow
             selectedCell.IsCardFaceDown = true;
             selectedCell.IsCardFaceUp = false;
         }
-
-        private async void FlipCardClick(object parameter)
-        {
-            if (isCardClickBusy)
-                return;
-
-            GameCellControlViewModel cellVM = parameter as GameCellControlViewModel;
-            if (cellVM == null)
-            {
-                return;
-            }
-
-            FlipCard(cellVM);
-
-            if (firstSelectedCell == null)
-            {
-                firstSelectedCell = cellVM;
-                SelectCell(firstSelectedCell, cellVM);
-                return;
-            }
-
-            if (secondSelectedCell == null)
-            {
-                secondSelectedCell = cellVM;
-                SelectCell(secondSelectedCell, cellVM);
-            }
-
-            if (firstSelectedCell != null && secondSelectedCell != null &&
-                firstSelectedCell.IsSelected && secondSelectedCell.IsSelected)
-            {
-                isCardClickBusy = true;
-                await Task.Delay(2000);
-                isCardClickBusy = false;
-                if (firstSelectedCell.Cell.ImageIndex == secondSelectedCell.Cell.ImageIndex)
-                {
-                    RemoveCell(firstSelectedCell);
-                    RemoveCell(secondSelectedCell);
-
-                    cardMatches++;
-                    if (cardMatches == ChosenImages.Count)
-                    {
-                        GameUser.GamesWon++;
-                        MessageBox.Show("You won!");
-                        ResetRound();
-                    }
-                }
-                else
-                {
-                    FlipCardToFaceDown(firstSelectedCell);
-                    FlipCardToFaceDown(secondSelectedCell);
-                }
-                firstSelectedCell = null;
-                secondSelectedCell = null;
-            }
-        }
-
-        private void ButtonCustomGameClick()
-        {
-            Dimensions = new BoardDimensions();
-            windowService = new WindowService();
-
-            windowService.ShowWindow<SelectBoardDimensionsViewModel>(
-                new object[] { Dimensions }, // pass the dimensions param
-                StartNewGame // this is the supervisor callback
-            );
-        }
-
-        private bool CanExecute_NewGame()
-        {
-            int result;
-            return int.TryParse(ChosenGameTime, out result) && ChosenGameTime != String.Empty && ChosenGameTime != "0" && ChosenCategoryType != CategoryType.Invalid;
-        }
-
-        private void ButtonChosenRockCategory()
-        {
-            ChosenCategoryType = CategoryType.RockAlbum;
-        }
-
-        private void ButtonChosenLeagueCategory()
-        {
-            ChosenCategoryType = CategoryType.League;
-        }
-        private void ButtonChosenBeerCategory()
-        {
-            ChosenCategoryType = CategoryType.Beer;
-        }
+        #endregion
     }
 }

@@ -11,6 +11,7 @@ namespace MemoryGame.Services
 {
     public class WindowService : IWindowService
     {
+        #region Methods
         public void ShowWindow<TViewModel>(object[] constructorArgs, Action onClose = null) where TViewModel : class
         {
             var viewModel = (TViewModel)Activator.CreateInstance(typeof(TViewModel), constructorArgs);
@@ -42,6 +43,6 @@ namespace MemoryGame.Services
             string viewName = viewModelType.Name.Replace("ViewModel", "Window");
             return Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == viewName);
         }
+        #endregion
     }
-
 }

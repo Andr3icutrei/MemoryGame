@@ -8,7 +8,8 @@ namespace MemoryGame.Services
 {
     public interface IWindowService
     {
-
+        #region Methods
         public void ShowWindow<TViewModel>(object[] constructorArgs, Action onClose = null) where TViewModel : class;
+        #endregion
     }
 }

@@ -34,7 +34,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="Auto" MinWidth="250" />
+                <ColumnDefinition Width="Auto" MinWidth="353" />
             </Grid.ColumnDefinitions>
 
 
@@ -47,25 +47,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" MinHeight="284"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Row="0"  Height="256" Width="256" Source="{Binding UserImage}" Margin="32,0,31,0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Stretch="Uniform"/>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
+                <Image Height="256" Width="256" Source="{Binding UserImage}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform"/>
             </Grid>
 
         </Grid>

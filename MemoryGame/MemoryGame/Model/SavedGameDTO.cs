@@ -11,6 +11,7 @@ namespace MemoryGame.Model
 {
     public class SavedGameDTO
     {
+        #region Public Properties
         public string Username { get; set; }
         public ushort ImageIndex { get; set; }
         public UInt16 GamesPlayed { get; set; }
@@ -21,7 +22,7 @@ namespace MemoryGame.Model
         public BoardDimensions Dimensions { get; set; }
         public ObservableCollection<ObservableCollection<GameCellControlViewModel>> GameBoardCells { get; set; }
         public string ChosenGameTime { get; set; }
-   
+        #endregion
     }
 
 }

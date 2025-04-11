@@ -15,6 +15,7 @@ namespace MemoryGame.Services
 {
     public static class GameImagesLoadService
     {
+        #region Methods
         public static ObservableCollection<ImageSource> LoadImages(CategoryType type,BoardDimensions dim) 
         {
             ObservableCollection<ImageSource> Images = new ObservableCollection<ImageSource>();
@@ -75,5 +76,6 @@ namespace MemoryGame.Services
             }
             return Images;
         }
+        #endregion
     }
 }

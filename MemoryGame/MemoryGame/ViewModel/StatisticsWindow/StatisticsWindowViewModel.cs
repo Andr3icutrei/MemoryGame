@@ -11,13 +11,13 @@ namespace MemoryGame.ViewModel.StatisticsWindow
 {
     public class StatisticsWindowViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<User> users;
+        private ObservableCollection<User> _users;
         public ObservableCollection<User> Users
         {
-            get { return users; }
+            get { return _users; }
             set
             {
-                users = value;
+                _users = value;
             }
         }
 

@@ -9,50 +9,58 @@ namespace MemoryGame.Model
 {
     public class User : INotifyPropertyChanged
     {
-        private UInt16 gamesPlayed;
+        #region Private fields
+        private UInt16 _gamesPlayed;
+        private UInt16 _gamesWon;
+        private string _username;
+        private UInt16 _imageIndex;
+        #endregion
+
+        #region Public properties
+        public bool IsAdded { get; set; }
+
         public UInt16 GamesPlayed
         {
-            get { return gamesPlayed; }
+            get { return _gamesPlayed; }
             set
             {
-                gamesPlayed = value;
+                _gamesPlayed = value;
                 OnPropertyChanged(nameof(GamesPlayed));
             }
         }
 
-        private UInt16 gamesWon;
         public UInt16 GamesWon
         {
-            get { return gamesWon; }
+            get { return _gamesWon; }
             set
             {
-                gamesWon = value;
+                _gamesWon = value;
                 OnPropertyChanged(nameof(GamesWon));
             }
         }
 
-        private string username;
         public string Username
         {
-            get => username;
+            get => _username;
             set
             {
-                username = value;
+                _username = value;
                 OnPropertyChanged(nameof(Username));
             }
         }
-        private UInt16 imageIndex;
+
         public UInt16 ImageIndex
         {
-            get => imageIndex;
+            get => _imageIndex;
             set
             {
-                imageIndex = value;
+                _imageIndex = value;
                 OnPropertyChanged(nameof(ImageIndex));
             }
         }
-        public bool IsAdded { get; set; }
+        #endregion
 
+        #region Constructors
         public User(string username)
         {
             Username = username;
@@ -62,7 +70,7 @@ namespace MemoryGame.Model
             GamesWon = 0;
         }
 
-        public User(string username,bool isAdded,UInt16 imageIndex,UInt16 gamesPlayed,UInt16 gamesWon)
+        public User(string username, bool isAdded, UInt16 imageIndex, UInt16 gamesPlayed, UInt16 gamesWon)
         {
             Username = username;
             IsAdded = isAdded;
@@ -88,6 +96,7 @@ namespace MemoryGame.Model
             GamesPlayed = 0;
             GamesWon = 0;
         }
+        #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -96,4 +105,5 @@ namespace MemoryGame.Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
 }

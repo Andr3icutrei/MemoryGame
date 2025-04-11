@@ -10,7 +10,13 @@ namespace MemoryGame.ViewModel.Shared
 {
     public class SharedViewModel: INotifyPropertyChanged
     {
+        #region Private fields
+
         private User boundUser;
+
+        #endregion
+
+        #region Public properties 
         public User BoundUser
         {
             get => boundUser;
@@ -20,14 +26,14 @@ namespace MemoryGame.ViewModel.Shared
                 OnPropertyChanged(nameof(BoundUser));
             }
         }
-
+        #endregion
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+        #region Constructors
         public SharedViewModel(User u)
         {
             BoundUser = u;
@@ -37,5 +43,6 @@ namespace MemoryGame.ViewModel.Shared
         {
             BoundUser = new User();
         }
+        #endregion
     }
 }

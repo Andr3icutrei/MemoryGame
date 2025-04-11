@@ -11,6 +11,7 @@ using System.Windows.Media;
 
 namespace MemoryGame.Services
 {
+    #region Methods
     public static class LoginImagesLoadService
     {
         private static readonly string _loginImagesPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, "LoginImages");
@@ -37,9 +38,12 @@ namespace MemoryGame.Services
                 Debug.Print("Images not loaded");
             }
         }
+        #endregion
+        #region Static constructor
         static LoginImagesLoadService()
         {
             LoadImages();
         }
+        #endregion
     }
 }

@@ -15,59 +15,65 @@ namespace MemoryGame.ViewModel.GameCellControl
 {
     public class GameCellControlViewModel : INotifyPropertyChanged
     {
-        public GameCell Cell {  get; set; }
-        private ImageSource frontCardImageSource;
+        #region Private fields
+        private ImageSource _frontCardImageSource;
+        private bool _isCardFaceUp;
+        private bool _isCardFaceDown;
+        private bool _isMatched;
+        #endregion
+
+        #region Public properties
+        public GameCell Cell { get; set; }
 
         [JsonIgnore]
         public ImageSource FrontCardImageSource
         {
-            get => frontCardImageSource;
+            get => _frontCardImageSource;
             set
             {
-                frontCardImageSource = value;
+                _frontCardImageSource = value;
                 OnPropertyChanged(nameof(FrontCardImageSource));
             }
         }
+
         [JsonIgnore]
         public ICommand FlipCommand { get; set; }
 
-        private bool isCardFaceUp;
         public bool IsCardFaceUp
         {
-            get => isCardFaceUp;
-            set 
-            {
-                isCardFaceUp = value; 
-                OnPropertyChanged(nameof(IsCardFaceUp)); 
-            }
-        }
-        public bool IsSelected {  get; set; }
-
-        private bool isCardFaceDown;
-        public bool IsCardFaceDown
-        {
-            get => isCardFaceDown;
+            get => _isCardFaceUp;
             set
             {
-                isCardFaceDown = value;
+                _isCardFaceUp = value;
+                OnPropertyChanged(nameof(IsCardFaceUp));
+            }
+        }
+
+        public bool IsSelected { get; set; }
+
+        public bool IsCardFaceDown
+        {
+            get => _isCardFaceDown;
+            set
+            {
+                _isCardFaceDown = value;
                 OnPropertyChanged(nameof(IsCardFaceDown));
             }
         }
 
-
-        private bool isMatched;
-
         public bool IsMatched
         {
-            get => isMatched;
+            get => _isMatched;
             set
             {
-                isMatched = value; 
+                _isMatched = value;
                 OnPropertyChanged(nameof(IsMatched));
             }
         }
+        #endregion
 
-        public GameCellControlViewModel(int i,int j,int imageIndex,ImageSource source)
+        #region Constructors
+        public GameCellControlViewModel(int i, int j, int imageIndex, ImageSource source)
         {
             IsCardFaceDown = true;
             IsCardFaceUp = !IsCardFaceDown;
@@ -83,9 +89,12 @@ namespace MemoryGame.ViewModel.GameCellControl
             FlipCommand = null;
             FrontCardImageSource = null;
         }
+        #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
         private void OnPropertyChanged(string prop)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
+
 }

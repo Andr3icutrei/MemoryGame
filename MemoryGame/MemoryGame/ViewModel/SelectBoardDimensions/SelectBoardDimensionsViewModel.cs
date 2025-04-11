@@ -24,23 +24,28 @@ namespace MemoryGame.ViewModel.SelectBoardDimensions
             }
         }
 
+        #region Commands
         public ICommand ButtonOKCommand { get; }
         public ICommand ButtonCancelCommand { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        #endregion
 
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        #region Constructor
         public SelectBoardDimensionsViewModel(BoardDimensions boardDimensions) 
         { 
             Dimensions = boardDimensions;
             ButtonOKCommand = new RelayCommand(Execute_ButtonOKClick,CanExecute_ButtonOKClick);
             ButtonCancelCommand = new RelayCommand(Execute_ButtonCancel);
-        }   
+        }
+        #endregion
 
+        #region Commands implementations
         private bool CanExecute_ButtonOKClick()
         {
             int resultRows,resultColumns;
@@ -62,6 +67,6 @@ namespace MemoryGame.ViewModel.SelectBoardDimensions
             Dimensions.AreValidDimensions = false;
             RequestClose?.Invoke();
         }
-
+        #endregion
     }
 }

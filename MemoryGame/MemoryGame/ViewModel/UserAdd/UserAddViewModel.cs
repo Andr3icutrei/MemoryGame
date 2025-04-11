@@ -22,18 +22,18 @@ namespace MemoryGame.ViewModel.UserAdd
         public ICommand ButtonLeftArrowClick { get; }
         public ICommand ButtonRightArrowClick { get; }
 
-        private ImageSource currentImage;
+        private ImageSource _currentImage;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ImageSource CurrentImage
         {
-            get => currentImage;
+            get => _currentImage;
             set
             {
-                if (currentImage != value)
+                if (_currentImage != value)
                 {
-                    currentImage = value;
+                    _currentImage = value;
                     OnPropertyChanged(nameof(CurrentImage));
                 }
             }

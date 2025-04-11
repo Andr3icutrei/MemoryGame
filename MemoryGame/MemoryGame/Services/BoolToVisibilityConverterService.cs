@@ -11,6 +11,7 @@ namespace MemoryGame.Services
 {
     public class BoolToVisibilityConverterService : IValueConverter
     {
+        #region Methods
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool isVisible = (bool)value;
@@ -21,5 +22,6 @@ namespace MemoryGame.Services
         {
             return (Visibility)value == Visibility.Visible;
         }
+        #endregion
     }
 }

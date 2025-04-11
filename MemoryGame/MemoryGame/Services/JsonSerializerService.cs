@@ -18,8 +18,10 @@ namespace MemoryGame.Services
 {
     public static class JsonSerializerService
     {
-
+        #region Private field
         private const string filepathUsers = "users.json";
+        #endregion
+        #region Methods
         public static void SaveUsers(LoginWindow window)
         {
             if (window.DataContext is LoginViewModel loginViewModel)
@@ -66,8 +68,6 @@ namespace MemoryGame.Services
                 File.WriteAllText(filepathUsers, json);
             }
         }
-
-
         public static List<User> LoadUsers()
         {
             if (!File.Exists(filepathUsers))
@@ -90,5 +90,6 @@ namespace MemoryGame.Services
             string updatedJson = JsonSerializer.Serialize(existingUsers, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filepathUsers, updatedJson);
         }
+        #endregion
     }
 }

@@ -20,14 +20,23 @@ namespace MemoryGame.ViewModel.Login
     {
         UserAddWindow w;
         public SharedViewModel SharedVM { get; set; }
-        public ICommand ButtonLeftArrowClick { get; }
-        public ICommand ButtonRightArrowClick { get; }
+        #region Commands
         public ICommand ButtonNewUserClick { get; }
         public ICommand ButtonDeleteUserClick { get; }
         public ICommand ButtonPlayClick { get; }
         public ICommand ButtonCancelClick { get; }
-        
+        #endregion
+
+        #region Private fields
+
         private User selectedUser;
+        private int selectedUserIndex = 0;
+        private ImageSource userImage;
+
+        #endregion
+
+        #region Public properties
+
         public User SelectedUser 
         {
             get => selectedUser;
@@ -37,8 +46,6 @@ namespace MemoryGame.ViewModel.Login
                 OnPropertyChanged(nameof(SelectedUser));
             }
         }
-
-        private int selectedUserIndex=0;
         public int SelectedUserIndex
         {
             get => selectedUserIndex;
@@ -55,15 +62,7 @@ namespace MemoryGame.ViewModel.Login
                 OnPropertyChanged(nameof(SelectedUserIndex));
             }
         }
-
-        public ObservableCollection<User> ListboxUserItems { get; set; }
-
-        private ImageSource userImage;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public View.GameWindow GameWindow { get; set; }
-
         public ImageSource UserImage
         {
             get { return userImage; }
@@ -73,7 +72,12 @@ namespace MemoryGame.ViewModel.Login
                 OnPropertyChanged(nameof(UserImage));
             }
         }
+        public ObservableCollection<User> ListboxUserItems { get; set; }
 
+        #endregion
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+    
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -83,8 +87,6 @@ namespace MemoryGame.ViewModel.Login
         {
             SharedVM = vm;
 
-            ButtonLeftArrowClick = new RelayCommand(Execute_LeftArrowClick);
-            ButtonRightArrowClick = new RelayCommand(Execute_RightArrowClick);
             ButtonNewUserClick = new RelayCommand(Execute_NewUserClick);
             ButtonDeleteUserClick = new RelayCommand(Execute_DeleteUserClick,CanExecute_DeleteUserClick);
             ButtonPlayClick = new RelayCommand(Execute_PlayClick,CanExecute_PlayClick);
@@ -101,16 +103,6 @@ namespace MemoryGame.ViewModel.Login
         private bool CanExecute_PlayClick()
         {
             return CanExecute_DeleteUserClick();
-        }
-
-        private void Execute_LeftArrowClick()
-        {
-
-        }
-
-        private void Execute_RightArrowClick()
-        {
-
         }
 
         private void Execute_NewUserClick()
@@ -148,7 +140,8 @@ namespace MemoryGame.ViewModel.Login
 
         private void Execute_CancelClick()
         {
-
+            SelectedUser = null;
+            SelectedUserIndex = -1;
         }
     }
 }

@@ -14,8 +14,10 @@ namespace MemoryGame.Services
 
     public static class UserGameSerializerService
     {
-        
+        #region Private fields
         private const string _filepathUsers = "users.json";
+        #endregion
+        #region Methods
         public static SavedGameDTO LoadGame(string username)
         {
             string json = File.ReadAllText(_filepathUsers);
@@ -39,8 +41,8 @@ namespace MemoryGame.Services
                 GamesPlayed = user.GamesPlayed,
                 GamesWon = user.GamesWon,
                 ChosenCategoryType = (CategoryType)vm.ChosenCategoryType,
-                Dimensions = vm.Dimensions, // or vm.Dimensions if serializable
-                GameBoardCells = vm.GameBoardCells, // optional: could map if needed
+                Dimensions = vm.Dimensions, 
+                GameBoardCells = vm.GameBoardCells,
                 ChosenGameTime = vm.ChosenGameTime,
             };
 
@@ -49,5 +51,6 @@ namespace MemoryGame.Services
 
             File.WriteAllText(_filepathUsers, json);
         }
+        #endregion
     }
 }
